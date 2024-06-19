@@ -1,0 +1,15 @@
+{
+    "name": "kolya/www",
+    "type": "project",
+    "license": "free",
+    "authors": [
+        {
+            "name": "Shamrylo Mykola",
+            "email": "itlutsk@gmail.com"
+        }
+    ],
+    "require": {
+        "kint-php/kint": "^5.1",
+        "symfony/var-dumper": "5.4.40"
+    }
+}
