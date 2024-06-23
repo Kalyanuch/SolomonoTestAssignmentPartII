@@ -10,10 +10,25 @@ use Symfony\Component\VarDumper\VarDumper;
 Kint\Renderer\RichRenderer::$theme = KINT_THEME . '.css';
 $pdo = Helper::getConnection();
 
-// Fetch categories from the database without caching results
-$query = $pdo->query('SELECT SQL_NO_CACHE `categories_id`, `parent_id`, NOW() FROM `categories`');
-$categories = $query->fetchAll(PDO::FETCH_ASSOC);
-$categoryTree = Helper::buildCategoryTree($categories);
+$type = (int)trim($_GET['type']);
+
+switch ($type) {
+    case 1:
+        echo 'With recursion<br>';
+        // Fetch categories from the database without caching results
+        $query = $pdo->query('SELECT SQL_NO_CACHE `categories_id`, `parent_id`, NOW() FROM `categories`');
+        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
+        $categoryTree = Helper::buildCategoryTreeTypeOne($categories);
+        break;
+    case 2:
+    default:
+        echo 'Without recursion<br>';
+        // Fetch categories from the database without caching results
+        $query = $pdo->query('SELECT SQL_NO_CACHE `categories_id`, `parent_id`, NOW() FROM `categories` ORDER BY `parent_id` desc');
+        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
+        $categoryTree = Helper::buildCategoryTreeTypeTwo($categories);
+        break;
+}
 
 // Kint
 d($categoryTree);

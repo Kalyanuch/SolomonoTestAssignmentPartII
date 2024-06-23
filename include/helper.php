@@ -20,12 +20,12 @@ class Helper {
     /*
      * Builds category tree recursively.
      */
-    public static function buildCategoryTree(array $categories, $parentId = 0) {
+    public static function buildCategoryTreeTypeOne(array $categories, $parentId = 0) {
         $branch = [];
 
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
-                $children = self::buildCategoryTree($categories, $category['categories_id']);
+                $children = self::buildCategoryTreeTypeOne($categories, $category['categories_id']);
                 if ($children) {
                     $branch[$category['categories_id']] = $children;
                 } else {
@@ -35,5 +35,24 @@ class Helper {
         }
 
         return $branch;
+    }
+
+    /*
+     * Builds category tree without recursion.
+     */
+    public static function buildCategoryTreeTypeTwo(array $categories) {
+        $categoryTree = [];
+
+        foreach ($categories as $category) {
+            if (isset($categoryTree[$category['categories_id']])) {
+                $categoryTree[$category['parent_id']][$category['categories_id']] = $categoryTree[$category['categories_id']];
+
+                unset($categoryTree[$category['categories_id']]);
+            } else {
+                $categoryTree[$category['parent_id']][$category['categories_id']] = $category['categories_id'];
+            }
+        }
+
+        return $categoryTree[0];
     }
 }
